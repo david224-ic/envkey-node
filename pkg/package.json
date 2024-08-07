@@ -1,5 +1,5 @@
 {
-  "name": "envkey",
+  "name": "@vex-soft/envkey",
   "version": "2.5.2",
   "description": "EnvKey secures and simplifies configuration and secrets management.",
   "repository": "https://github.com/david224-ic/envkey",
