@@ -164,17 +164,36 @@ function fetch(optsOrCb, maybeCb){
     });
 
     // Listen for messages from the daemon
-    currentEnv = initialEnv;
+    let currentEnv = initialEnv;
+    let envkeyKeys = Object.entries(initialEnv).map(([key, value]) => key)
     client.on('data', function(data) {
       const msg = data.toString().trim();
 
       if (msg == "env_update"){
-        execFile(filePath, execArgs, { env: process.env, cwd: opts.cwd }, function(err, stdoutStr, stderrStr){       
+        const newExecArgs = [...execArgs, '--force']
+        execFile(filePath, newExecArgs, { env: process.env, cwd: opts.cwd }, function(err, stdoutStr, stderrStr){       
           if (!err && stdoutStr.indexOf("error: ") != 0){
             var json = JSON.parse(stdoutStr)
             var previousEnv = currentEnv;
             currentEnv = pickPermitted(json, opts)
+            
+            currentEnv = Object.keys(currentEnv)
+              .filter(key => {
+                if(envkeyKeys.includes(key)) {
+                  return true
+                } else if(process.env[key] == null) {
+                  envkeyKeys.push(key)
+                  return true
+                } else {
+                  return false
+                }
+              })
+              .reduce((obj, key) => {
+                obj[key] = currentEnv[key];
+                return obj;
+              }, {});
 
+            
             var changedKeys = [];
             for (var k in currentEnv){
               if (currentEnv[k] != previousEnv[k]){
