@@ -1,8 +1,8 @@
 {
   "name": "envkey",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "EnvKey secures and simplifies configuration and secrets management.",
-  "repository": "https://github.com/envkey/envkey",
+  "repository": "https://github.com/david224-ic/envkey",
   "main": "index.js",
   "files": [
     "index.js",
@@ -21,7 +21,7 @@
     "encryption",
     "security"
   ],
-  "author": "EnvKey <support@envkey.com> (https://www.envkey.com)",
+  "author": "David H. Estevam <david@inovaclick.com.br>",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
