@@ -7,7 +7,8 @@ export type Options = {
   shouldCache?: boolean;
   dotEnvFile?: string;
   memCache?: boolean;
-  cwd?: string;
+  cwd?: string | URL;
+  timeout?: number;
   onChange?: (
     updatedEnv: Record<string, string>,
     previousEnv: Record<string, string>,

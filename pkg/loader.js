@@ -171,7 +171,7 @@ function fetch(optsOrCb, maybeCb){
 
       if (msg == "env_update"){
         const newExecArgs = [...execArgs, '--force']
-        execFile(filePath, newExecArgs, { env: process.env, cwd: opts.cwd }, function(err, stdoutStr, stderrStr){       
+        execFile(filePath, newExecArgs, { env: process.env, cwd: opts.cwd, timeout: opts.timeout, killSignal: 'SIGKILL' }, function(err, stdoutStr, stderrStr){       
           if (!err && stdoutStr.indexOf("error: ") != 0){
             var json = JSON.parse(stdoutStr)
             var previousEnv = currentEnv;
@@ -224,7 +224,7 @@ function fetch(optsOrCb, maybeCb){
       return;
     }
     // resolve ENVKEY from envkey-source, then connect to envkey-source daemon via TCP and listen for updates      
-    execFile(filePath, ["--resolve-envkey"], { env: process.env, cwd: opts.cwd }, function(err, stdoutStr, stderrStr){
+    execFile(filePath, ["--resolve-envkey"], { env: process.env, cwd: opts.cwd, timeout: opts.timeout, killSignal: 'SIGKILL' }, function(err, stdoutStr, stderrStr){
       if (!err && stdoutStr){
         const envkey = stdoutStr;
         connectAndListenTCP(envkey, initialEnv)
@@ -236,7 +236,7 @@ function fetch(optsOrCb, maybeCb){
   
 
   if (cb){
-    execFile(filePath, execArgs, { env: process.env, cwd: opts.cwd }, function(err, stdoutStr, stderrStr){
+    execFile(filePath, execArgs, { env: process.env, cwd: opts.cwd, timeout: opts.timeout, killSignal: 'SIGKILL' }, function(err, stdoutStr, stderrStr){
       
       if (err){
         cb(stderrStr.replace(/echo 'error: /g, "").replace(/'; false/g, ""))
@@ -254,7 +254,7 @@ function fetch(optsOrCb, maybeCb){
 
   } else {
     try {
-      var res = execFileSync(filePath, execArgs, { env: process.env, cwd: opts.cwd}).toString()
+      var res = execFileSync(filePath, execArgs, { env: process.env, cwd: opts.cwd, timeout: opts.timeout, killSignal: 'SIGKILL' }).toString()
 
       if(!res || !res.trim()){
         throwKeyError()
